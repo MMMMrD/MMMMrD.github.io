@@ -1,0 +1,260 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Unity-FSM有限状态机 | MMMMrD</title><meta name="author" content="MMMMrD"><meta name="copyright" content="MMMMrD"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Unity-FSM有限状态机什么是有限状态机？​	在编写一些需要判断多个条件的程序时，我们常常会用到 if-else 语句，这样能够很好的帮我们解决多数问题。但在游戏开发过程中，一个角色的行为不是一成不变的，需要实时的进行修改，此时如果我们使用的是 if-else 来判断角色所处状态，就需要修改整个代码体，十分麻烦。而有限状态机很好的解决了这一些问题。 ​	有限状态机实现的方式是，将判断条件、角色">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity-FSM有限状态机">
+<meta property="og:url" content="http://example.com/2023/11/13/Unity-FSM%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/index.html">
+<meta property="og:site_name" content="MMMMrD">
+<meta property="og:description" content="Unity-FSM有限状态机什么是有限状态机？​	在编写一些需要判断多个条件的程序时，我们常常会用到 if-else 语句，这样能够很好的帮我们解决多数问题。但在游戏开发过程中，一个角色的行为不是一成不变的，需要实时的进行修改，此时如果我们使用的是 if-else 来判断角色所处状态，就需要修改整个代码体，十分麻烦。而有限状态机很好的解决了这一些问题。 ​	有限状态机实现的方式是，将判断条件、角色">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/4K/%E9%AC%BC%E5%88%80-%E5%85%83%E5%AE%B5.jpg">
+<meta property="article:published_time" content="2023-11-13T12:30:37.999Z">
+<meta property="article:modified_time" content="2023-11-13T12:42:20.542Z">
+<meta property="article:author" content="MMMMrD">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="游戏开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/4K/%E9%AC%BC%E5%88%80-%E5%85%83%E5%AE%B5.jpg"><link rel="shortcut icon" href="/img/Icon/UnityIcon.svg"><link rel="canonical" href="http://example.com/2023/11/13/Unity-FSM%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Unity-FSM有限状态机',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-11-13 20:42:20'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/universe.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.0.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/wanye.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/4K/%E9%AC%BC%E5%88%80-%E5%85%83%E5%AE%B5.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="MMMMrD"><span class="site-name">MMMMrD</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Unity-FSM有限状态机</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-11-13T12:30:37.999Z" title="发表于 2023-11-13 20:30:37">2023-11-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-11-13T12:42:20.542Z" title="更新于 2023-11-13 20:42:20">2023-11-13</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Unity-FSM有限状态机"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Unity-FSM有限状态机"><a href="#Unity-FSM有限状态机" class="headerlink" title="Unity-FSM有限状态机"></a>Unity-FSM有限状态机</h1><h2 id="什么是有限状态机？"><a href="#什么是有限状态机？" class="headerlink" title="什么是有限状态机？"></a>什么是有限状态机？</h2><p>​	在编写一些需要判断多个条件的程序时，我们常常会用到 <strong>if-else</strong> 语句，这样能够很好的帮我们解决多数问题。但在游戏开发过程中，一个角色的行为不是一成不变的，需要实时的进行修改，此时如果我们使用的是 <strong>if-else</strong> 来判断角色所处状态，就需要修改整个代码体，十分麻烦。而有限状态机很好的解决了这一些问题。</p>
+<p>​	有限状态机实现的方式是，将判断条件、角色状态、状态机分别封装成一个类，这样当我们需要增加或者减少角色的状态时，直接将对应的状态与相对应的条件删除即可，不会影响到所有的代码，极大的减少了开发时间。</p>
+<p>​	下面将介绍有限状态机该如何编写。</p>
+<h2 id="有限状态机简单实现"><a href="#有限状态机简单实现" class="headerlink" title="有限状态机简单实现"></a>有限状态机简单实现</h2><p>​	一般的状态机代码，会先有一个抽象的状态父类，其中包含两个抽象函数，一个是需要在进入状态的一开始就执行，一个是需要在程序执行的时候每一帧都执行，并由子类继承这个抽象父类，实现对应的两个函数。<strong>切换条件需要写在每一帧都调用的函数中。</strong></p>
+<ul>
+<li>状态类:</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">EnemyBaseState</span> <span class="comment">//状态父类</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">EnterState</span>(<span class="params">Enemy enemy</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">OnUpdate</span>(<span class="params">Enemy enemy</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PatrolState</span> : <span class="title">EnemyBaseState</span> <span class="comment">//巡逻子类</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">EnterState</span>(<span class="params">Enemy enemy</span>)<span class="comment">//进入状态函数</span></span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//此处省略</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnUpdate</span>(<span class="params">Enemy enemy</span>)<span class="comment">//每帧都需要执行</span></span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//此处省略</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(Mathf.Abs(enemy.transform.position.x - enemy.targetPoint.position.x) &lt; <span class="number">0.01f</span>)<span class="comment">//如果已经达到目标点</span></span><br><span class="line">        &#123;</span><br><span class="line">            enemy.TransitionState(enemy.patrolState);<span class="comment">//重新进入该状态</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(enemy.attackList.Count != <span class="number">0</span>)<span class="comment">//攻击目标集合不为0</span></span><br><span class="line">        &#123;</span><br><span class="line">            enemy.TransitionState(enemy.attackState);<span class="comment">//切换为攻击状态</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	在使用状态机时，就可以只创建抽象父类实例对象，在程序执行的过程中将不同的子类赋值给该对象（<strong>里氏转换</strong>），并调用其中的两个函数。</p>
+<p>​	当然，在执行各个状态中的函数时，不可避免的需要调用脚本中的参数，所以需要将<strong>脚本的引用传递给状态机</strong>。</p>
+<ul>
+<li>Controller（状态机使用者）:</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">Enemy</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">	[<span class="meta">Header(<span class="string">&quot;状态机相关&quot;</span>)</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//创建状态机对象</span></span><br><span class="line">    EnemyBaseState currentState; </span><br><span class="line">    </span><br><span class="line">    <span class="comment">//实例化子类对象</span></span><br><span class="line">    <span class="keyword">public</span> PatrolState patrolState = <span class="keyword">new</span> PatrolState();</span><br><span class="line">    <span class="keyword">public</span> AttackState attackState = <span class="keyword">new</span> AttackState();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//程序开始时，设置初始状态</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        TransitionState(patrolState);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TransitionState</span>(<span class="params">EnemyBaseState state</span>)<span class="comment">//切换状态类的函数</span></span></span><br><span class="line">    &#123;</span><br><span class="line">        currentState = state;</span><br><span class="line">        currentState.EnterState(<span class="keyword">this</span>);<span class="comment">//进入状态需要执行的函数</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        currentState.OnUpdate(<span class="keyword">this</span>); <span class="comment">//各个状态中每一帧都需要执行的函数</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="将条件写成类的有限状态机"><a href="#将条件写成类的有限状态机" class="headerlink" title="将条件写成类的有限状态机"></a>将条件写成类的有限状态机</h2><p>​	如上所述，我们需要将代码变成三个部分，判断条件、角色状态、状态机，三个部分对应三个基类。这样的写法，需要将在状态类中实例化条件类的对象，从而进行条件的判断。</p>
+<p>​	下面将一一介绍：</p>
+<h3 id="判断条件-Trigger"><a href="#判断条件-Trigger" class="headerlink" title="判断条件(Trigger)"></a>判断条件(Trigger)</h3><p>​	条件类需要以下几个成员：</p>
+<blockquote>
+<ol>
+<li>条件编号：属性成员代替，方便其他类查找条件</li>
+<li>构造函数：强制要求对属性赋值</li>
+<li>判断函数：需要传进一个状态机参数，因为条件类本身不自带参数，需要状态机的参数进行条件判断</li>
+</ol>
+</blockquote>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">Trigger</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> TriggerID triggerID&#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;<span class="comment">//属性编号</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Trigger</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Init();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">Init</span>()</span>;<span class="comment">//构造函数，用于对属性赋值</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="built_in">bool</span> <span class="title">HandleTrigger</span>(<span class="params">Base fsmBase</span>)</span>;</span><br><span class="line">    <span class="comment">//判断函数，可以让别的类调用，并返回一个bool值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="角色状态-State"><a href="#角色状态-State" class="headerlink" title="角色状态(State)"></a>角色状态(State)</h3><p>​	状态类需要以下几个成员：</p>
+<blockquote>
+<ol>
+<li>状态编号：用属性代替，方便查找对应的条件</li>
+<li>条件集合：由于保存各种条件对象</li>
+<li>字典集合：用于查询条件成立时对应的状态</li>
+<li>构造函数：强制要求对属性赋值</li>
+<li>配置字典函数：向字典集合中添加成员</li>
+<li>判断函数：由状态机调用，判断此时有何条件成立</li>
+<li>三个基本函数：进入状态、状态执行、退出状态</li>
+</ol>
+</blockquote>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">State</span></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> Dictionary&lt;TriggerID,StateID&gt; map;<span class="comment">//字典</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> List&lt;Trigger&gt; Triggers;<span class="comment">//条件集合</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> StateID stateID &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;<span class="comment">//状态属性</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">State</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            map = <span class="keyword">new</span> Dictionary&lt;TriggerID, StateID&gt;();</span><br><span class="line">            </span><br><span class="line">            Init();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">Init</span>()</span>;<span class="comment">//抽象化构造函数</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Reason</span>(<span class="params">Base fsmBase</span>)<span class="comment">//由 状态机 调用的 检测方法</span></span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;Triggers.Count;i++)<span class="comment">//遍历条件集合</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(Triggers[i].HandleTrigger(fsmBase))</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">//切换状态</span></span><br><span class="line">                    fsmBase.ChangeActiveState(map[Triggers[i].triggerID]);</span><br><span class="line">                    <span class="comment">//将条件对应的状态ID传引用给状态机</span></span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">AddMap</span>(<span class="params">TriggerID triggerID,StateID stateID</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            map.Add(triggerID,stateID);</span><br><span class="line">            <span class="comment">//创建条件对象</span></span><br><span class="line"></span><br><span class="line">            Type type = Type.GetType(<span class="string">&quot;FSM.&quot;</span>+triggerID+<span class="string">&quot;Trigger&quot;</span>);</span><br><span class="line">            Trigger trigger = Activator.CreateInstance(type) <span class="keyword">as</span> Trigger;</span><br><span class="line">            Triggers.Add(trigger);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">EnterState</span>(<span class="params">Base fsmBase</span>)</span>&#123;&#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">ActionState</span>(<span class="params">Base fsmBase</span>)</span>&#123;&#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">ExitState</span>(<span class="params">Base fsmBase</span>)</span>&#123;&#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="状态机-Base"><a href="#状态机-Base" class="headerlink" title="状态机(Base)"></a>状态机(Base)</h3><p>​	状态机所需成员：</p>
+<blockquote>
+<ol>
+<li>默认状态ID：在Unity界面选择</li>
+<li>状态列表：存储所有状态对象</li>
+<li>初始化组件函数：初始化对应组件</li>
+<li>初始化默认状态函数：根据默认状态ID设置默认状态</li>
+<li>配置状态机函数：向条件列表与条件类中的字典集合中添加对象</li>
+<li>切换状态函数：由状态类调用，条件满足后切换状态</li>
+</ol>
+</blockquote>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Base</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">    &#123;</span><br><span class="line">        </span><br><span class="line">        [<span class="meta">Header(<span class="string">&quot;角色基本组件&quot;</span>)</span>]</span><br><span class="line">        [<span class="meta">HideInInspector</span>]<span class="keyword">public</span> Animator Anim;</span><br><span class="line">        [<span class="meta">HideInInspector</span>]<span class="keyword">public</span> Rigidbody2D rb;</span><br><span class="line">        </span><br><span class="line">        [<span class="meta">Tooltip(<span class="string">&quot;初始状态&quot;</span>)</span>]<span class="keyword">public</span> StateID defaultStateID;</span><br><span class="line">        <span class="keyword">private</span> List&lt;State&gt; states;<span class="comment">//状态列表</span></span><br><span class="line">        <span class="keyword">public</span> State currentState;<span class="comment">//当前状态</span></span><br><span class="line">        <span class="keyword">public</span> State defaultState;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Start</span>()</span> </span><br><span class="line">        &#123;</span><br><span class="line">            InitCommponent();</span><br><span class="line">            SetBase();</span><br><span class="line">            InitDefaultState();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">InitCommponent</span>()<span class="comment">//初始化组件</span></span></span><br><span class="line">        &#123;</span><br><span class="line">            Anim = GetComponentInChildren&lt;Animator&gt;();</span><br><span class="line">            rb = GetComponentInChildren&lt;Rigidbody2D&gt;();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">InitDefaultState</span>()<span class="comment">//初始化默认状态</span></span></span><br><span class="line">        &#123;</span><br><span class="line">            defaultState = states.Find(s =&gt; s.stateID == defaultStateID);</span><br><span class="line">            currentState = defaultState;</span><br><span class="line">            currentState.EnterState(<span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//配置状态机</span></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">SetBase</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            states = <span class="keyword">new</span> List&lt;State&gt;();</span><br><span class="line">            <span class="comment">// //--创建状态对象</span></span><br><span class="line">            <span class="comment">// IdleState idleState = new IdleState();</span></span><br><span class="line">            <span class="comment">// //--添加映射</span></span><br><span class="line">            <span class="comment">// idleState.AddMap(TriggerID.NoHealth,StateID.Dead);</span></span><br><span class="line">            <span class="comment">// //--加入状态机</span></span><br><span class="line">            <span class="comment">// states.Add(idleState);</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// DeadState deadState = new DeadState();</span></span><br><span class="line">            <span class="comment">// states.Add(deadState);</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//每帧处理的逻辑</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Update</span>()</span> </span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//判断当前状态条件</span></span><br><span class="line">            currentState.Reason(<span class="keyword">this</span>);</span><br><span class="line">            <span class="comment">//执行当前状态逻辑</span></span><br><span class="line">            currentState.ActionState(<span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ChangeActiveState</span>(<span class="params">StateID stateID</span>)<span class="comment">//切换状态</span></span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//离开上一个状态</span></span><br><span class="line">            currentState.ExitState(<span class="keyword">this</span>);</span><br><span class="line">            <span class="comment">//切换状态</span></span><br><span class="line">            currentState = stateID == StateID.Default?defaultState:states.Find(s =&gt; s.stateID == stateID);</span><br><span class="line">            <span class="comment">//进入下一个状态</span></span><br><span class="line">            currentState.EnterState(<span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">MMMMrD</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/11/13/Unity-FSM%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/">http://example.com/2023/11/13/Unity-FSM%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">MMMMrD</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Unity/">Unity</a><a class="post-meta__tags" href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/">游戏开发</a></div><div class="post_share"><div class="social-share" data-image="/img/4K/%E9%AC%BC%E5%88%80-%E5%85%83%E5%AE%B5.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/11/13/Unity-%E5%9C%BA%E6%99%AF%E7%9A%84%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD/" title="Unity-场景的异步加载"><img class="cover" src="/img/Icon/UnityIcon.svg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Unity-场景的异步加载</div></div></a></div><div class="next-post pull-right"><a href="/2023/11/13/Unity-%E6%95%8C%E4%BA%BA%EF%BC%88Enemy%EF%BC%89/" title="Unity-敌人（Enemy）"><img class="cover" src="/img/Icon/UnityIcon.svg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Unity-敌人（Enemy）</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/11/13/Unity-Light%EF%BC%88%E5%90%ABUnity2021-2d%E9%A1%B9%E7%9B%AE%E5%8D%87%E7%BA%A7Urp%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF%EF%BC%89/" title="Unity-Light（含Unity2021-2d项目升级Urp渲染管线）"><img class="cover" src="/img/Icon/UnityIcon.svg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-13</div><div class="title">Unity-Light（含Unity2021-2d项目升级Urp渲染管线）</div></div></a></div><div><a href="/2023/11/13/Unity-%E5%8D%8F%E7%A8%8B/" title="Unity-协程"><img class="cover" src="/img/Icon/UnityIcon.svg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-13</div><div class="title">Unity-协程</div></div></a></div><div><a href="/2022/04/01/Unity-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" title="Unity-单例模式"><img class="cover" src="/img/4K/%E9%AC%BC%E5%88%80-%E5%85%83%E5%AE%B5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-01</div><div class="title">Unity-单例模式</div></div></a></div><div><a href="/2023/11/13/Unity-%E5%9C%BA%E6%99%AF%E7%9A%84%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD/" title="Unity-场景的异步加载"><img class="cover" src="/img/Icon/UnityIcon.svg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-13</div><div class="title">Unity-场景的异步加载</div></div></a></div><div><a href="/2023/11/13/Unity-%E5%AF%B9%E8%B1%A1%E6%B1%A0%20&%20%E5%A4%9A%E5%AF%B9%E8%B1%A1%E6%B1%A0/" title="Unity-对象池&amp;多对象池"><img class="cover" src="/img/4K/%E9%AC%BC%E5%88%80-%E5%85%83%E5%AE%B5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-13</div><div class="title">Unity-对象池&amp;多对象池</div></div></a></div><div><a href="/2023/11/13/Unity-%E5%B0%84%E7%BA%BF/" title="Unity-射线"><img class="cover" src="/img/Icon/UnityIcon.svg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-13</div><div class="title">Unity-射线</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/wanye.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">MMMMrD</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/MMMMrD"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/MMMMrD" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1114076718@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="xpand" style="height:200px;"><canvas class="illo" width="800" height="800" style="max-width: 200px; max-height: 200px; touch-action: none; width: 640px; height: 640px;"></canvas></div><script src="https://fastly.jsdelivr.net/gh/xiaopengand/blogCdn@latest/xzxr/twopeople1.js"></script><script src="https://fastly.jsdelivr.net/gh/xiaopengand/blogCdn@latest/xzxr/zdog.dist.js"></script><script id="rendered-js" src="https://fastly.jsdelivr.net/gh/xiaopengand/blogCdn@latest/xzxr/twopeople.js"></script><style>.card-widget.card-announcement {
+margin: 0;
+align-items: center;
+justify-content: center;
+text-align: center;
+}
+canvas {
+display: block;
+margin: 0 auto;
+cursor: move;
+}
+</style><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">QQ:1114076718</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Unity-FSM%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-number">1.</span> <span class="toc-text">Unity-FSM有限状态机</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">什么是有限状态机？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.2.</span> <span class="toc-text">有限状态机简单实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E6%9D%A1%E4%BB%B6%E5%86%99%E6%88%90%E7%B1%BB%E7%9A%84%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-number">1.3.</span> <span class="toc-text">将条件写成类的有限状态机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E6%9D%A1%E4%BB%B6-Trigger"><span class="toc-number">1.3.1.</span> <span class="toc-text">判断条件(Trigger)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%92%E8%89%B2%E7%8A%B6%E6%80%81-State"><span class="toc-number">1.3.2.</span> <span class="toc-text">角色状态(State)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA-Base"><span class="toc-number">1.3.3.</span> <span class="toc-text">状态机(Base)</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/11/13/C#-%E5%A7%94%E6%89%98%E7%B1%BB%E5%9E%8B%EF%BC%88delegate%EF%BC%89/" title="C#-委托类型（delegate）"><img src="/img/Icon/UnityIcon.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C#-委托类型（delegate）"/></a><div class="content"><a class="title" href="/2023/11/13/C#-%E5%A7%94%E6%89%98%E7%B1%BB%E5%9E%8B%EF%BC%88delegate%EF%BC%89/" title="C#-委托类型（delegate）">C#-委托类型（delegate）</a><time datetime="2023-11-13T12:50:49.379Z" title="发表于 2023-11-13 20:50:49">2023-11-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/13/C#-%E4%BA%8B%E4%BB%B6%EF%BC%88event%EF%BC%89/" title="C#-事件"><img src="/img/Icon/UnityIcon.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C#-事件"/></a><div class="content"><a class="title" href="/2023/11/13/C#-%E4%BA%8B%E4%BB%B6%EF%BC%88event%EF%BC%89/" title="C#-事件">C#-事件</a><time datetime="2023-11-13T12:50:49.376Z" title="发表于 2023-11-13 20:50:49">2023-11-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/13/C#-%E5%A4%9A%E6%80%81/" title="C#-多态"><img src="/img/4K/%E9%AC%BC%E5%88%80-%E5%85%83%E5%AE%B5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C#-多态"/></a><div class="content"><a class="title" href="/2023/11/13/C#-%E5%A4%9A%E6%80%81/" title="C#-多态">C#-多态</a><time datetime="2023-11-13T12:50:49.373Z" title="发表于 2023-11-13 20:50:49">2023-11-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/13/Unity-%E8%83%8C%E5%8C%85%E7%B3%BB%E7%BB%9F/" title="无题"><img src="/img/Icon/UnityIcon.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2023/11/13/Unity-%E8%83%8C%E5%8C%85%E7%B3%BB%E7%BB%9F/" title="无题">无题</a><time datetime="2023-11-13T12:43:45.505Z" title="发表于 2023-11-13 20:43:45">2023-11-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/13/Unity-%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" title="Unity-工厂模式"><img src="/img/Icon/UnityIcon.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Unity-工厂模式"/></a><div class="content"><a class="title" href="/2023/11/13/Unity-%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" title="Unity-工厂模式">Unity-工厂模式</a><time datetime="2023-11-13T12:30:38.005Z" title="发表于 2023-11-13 20:30:38">2023-11-13</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/4K/%E9%AC%BC%E5%88%80-%E5%85%83%E5%AE%B5.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2023 By MMMMrD</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_anzhiyu_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock_anzhiyu')
+    if(parent_div_git) {
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var qweather_key = '449d1601d657466b8830423845a30d14';
+  var gaud_map_key = '36c6d95a91c34d7b990444857f758b38';
+  var baidu_ak_key = 'undefined';
+  var flag = 0;
+  var clock_rectangle = '112.982279,28.19409';
+  var clock_default_rectangle_enable = 'false';
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_anzhiyu_injector_config();
+  }
+  </script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js"></script><!-- hexo injector body_end end --></body></html>
